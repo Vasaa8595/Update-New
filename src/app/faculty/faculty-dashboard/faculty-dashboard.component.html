@@ -1,0 +1,98 @@
+
+<mat-toolbar>
+    <div class="top">
+      <img width="65px" src="Bannari_Amman_Institute_of_Technology_logo.png" alt="BIT Logo">
+      <button mat-button (click)="opened = !opened"><mat-icon>menu</mat-icon></button>
+      <h2>BIT Grievance Portal</h2>
+    </div>
+    <div class="img">
+      <div class="dropdown" (click)="toggleDropdown()">
+        <img [src]="profileimg" alt="userpic"> {{ Name }}
+        <span class="left-icon"></span>
+        <span class="right-icon"></span>
+        <div class="items">
+          <a href="#" style="--i:1;" routerLink='dashboard'>Profile</a>
+          <a href="#" style="--i:2;"><span (click)="signOut()">Logout</span></a>
+        </div>
+      </div>
+    </div>
+  </mat-toolbar>
+  
+  <!-- Sidenav Section -->
+  <mat-sidenav-container>
+    <mat-sidenav [(opened)]="opened" mode="side">
+      <img [src]="profileimg" alt="userpic">
+      <mat-list>
+        <mat-list-item>
+          <a mat-button routerLink='dashboard'>Dashboard</a>
+        </mat-list-item>
+        <mat-list-item>
+          <a mat-button routerLink='component'>Personal</a>
+        </mat-list-item>
+        
+      </mat-list>
+    </mat-sidenav>
+  
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+      <div class="dashboard-container">
+        <div class="dashboard-header">
+          <h1>Faculty Dashboard</h1>
+          <p>Manage and track student grievances efficiently.</p>
+        </div>
+  
+        <!-- Query Summary -->
+        <div class="query-summary">
+          <div class="summary-box">
+            <h2>Total Queries</h2>
+            <p>{{ totalQueries }}</p>
+          </div>
+          <div class="summary-box">
+            <h2>Solved Queries</h2>
+            <p>{{ solvedQueries }}</p>
+          </div>
+          <div class="summary-box">
+            <h2>Rejected Queries</h2>
+            <p>{{ rejectedQueries }}</p>
+          </div>
+        </div>
+  
+        <!-- Query Table -->
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Roll Number</th>
+              <th>Category</th>
+              <th>Summary</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let query of processedQueries; let i = index">
+              <td>{{ query.name }}</td>
+              <td>{{ query.rollNumber }}</td>
+              <td>{{ query.category }}</td>
+              <td>{{ query.summary }}</td>
+              <td 
+                [class.solved]="query.status === 'Solved'"
+                [class.rejected]="query.status === 'Rejected'"
+                [class.pending]="query.status === 'Pending'">
+                {{ query.status }}
+              </td>
+              <td>
+                <button class="btn-view" (click)="viewQuery(i)">View</button>
+                <button class="btn-solve" (click)="solveQuery(i)">Solve</button>
+                <button class="btn-reject" (click)="rejectQuery(i)">Reject</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+      
+  
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  

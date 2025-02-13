@@ -1,0 +1,194 @@
+
+<mat-toolbar>
+    <div class="top">
+      <img width="65px" src="Bannari_Amman_Institute_of_Technology_logo.png" alt="BIT Logo">
+      <button mat-button (click)="opened = !opened"><mat-icon>menu</mat-icon></button>        
+      
+     <h2>BIT Grievance Portal</h2>
+    </div>
+    <div class="img">
+      <div class="dropdown" (click)="toggleDropdown()">
+        <img [src]="profileimg" alt="userpic"> {{ Name }}
+        <span class="left-icon"></span>
+        <span class="right-icon"></span>
+        <div class="items">
+          <a href="#" style="--i:2;"><i class="fa-solid fa-arrow-right-from-bracket"></i><span (click)="signOut()">  Logout</span></a>
+        </div>
+      </div>
+    </div>
+  </mat-toolbar>
+  
+  <!-- Sidenav Section -->
+  <mat-sidenav-container>
+    <mat-sidenav [(opened)]="opened" mode="side">
+      <img [src]="profileimg" alt="userpic">
+      <mat-list>
+        <mat-list-item><a mat-button (click)="showComponent('student-dashboard')"><i class="fa-solid fa-chart-line"></i>  Dashboard</a></mat-list-item>
+        <mat-list-item><a mat-button (click)="showComponent('personal-grievance')"><i class="fa-solid fa-circle-question"></i> Personal</a></mat-list-item>
+        <mat-list-item><a mat-button (click)="showComponent('anonymous-grievance')"><i class="fa-regular fa-circle-question"></i>  Anonymous</a></mat-list-item>
+        <mat-list-item> <a href="#" style="--i:2;"><i class="fa fa-sign-out" aria-hidden="true"></i>  <span (click)="signOut()">  Logout</span></a></mat-list-item>
+      </mat-list>
+    </mat-sidenav>
+  
+    <mat-sidenav-content>
+      
+      <div *ngIf="activeComponent === 'student-dashboard'">
+      
+<div class="dashboard-container">
+  <div class="left-panel">
+    <div class="profile-section">
+      <div class="profile-card">
+        <div class="profile-image">
+          <img [src]="profileimg" alt="userpic"></div>
+          
+        <div class="profile-details">
+
+          <h2 class="studentname">{{ Name }}</h2>
+
+          <p class="role">Student</p>
+          <div class="info-grid">
+            <div class="info-item">
+              <i class="fas fa-graduation-cap"></i>
+              <p>{{studentDepartment}}</p>
+            </div>
+            <div class="info-item">
+              <i class="fas fa-calendar"></i>
+              <p>Year {{studentYear}}</p>
+            </div>
+          </div>
+          <div class="status-badge" [ngClass]="{'active': student.status === 'Continuing', 'inactive': student.status === 'Discontinued'}">
+            {{student.status}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kpi-section">
+      <h3>Academic Details</h3>
+      <div class="kpi-grid">
+        <div class="kpi-item">
+          <span class="kpi-label">Attendance</span>
+          <span class="kpi-value">85%</span>
+        </div>
+        <div class="kpi-item">
+          <span class="kpi-label">GPA</span>
+          <span class="kpi-value">3.8</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="right-panel">
+    <div class="status-panel">
+      <div class="academic-status">
+        <h3>Academic Status</h3>
+        <div class="status-grid">
+          <div class="status-item">
+            <span class="label">Semester</span>
+            <span class="value">{{student.currentSemester}}</span>
+          </div>
+          <div class="status-item">
+            <span class="label">Academic Year</span>
+            <span class="value">{{academicYear}}</span>
+          </div>
+          <div class="status-item">
+            <span class="label">Enrollment</span>
+            <div class="enrollment-status" [ngClass]="{'active': student.enrollmentStatus === 'Continuing', 'inactive': student.enrollmentStatus === 'Discontinued'}">
+              {{student.enrollmentStatus}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="query-section">
+      <div class="query-stats">
+        <div class="stat-card total">
+          <h4>Total Queries</h4>
+          <span>{{queryStats.total}}</span>
+        </div>
+        <div class="stat-card solved">
+          <h4>Solved</h4>
+          <span>{{queryStats.solved}}</span>
+        </div>
+        <div class="stat-card pending">
+          <h4>Pending</h4>
+          <span>{{queryStats.pending}}</span>
+        </div>
+        <div class="stat-card rejected">
+          <h4>Rejected</h4>
+          <span>{{queryStats.rejected}}</span>
+        </div>
+      </div>
+
+      <div class="query-list-container">
+        <div class="list-header">
+          <h3>Recent Queries</h3>
+          <div class="search-container">
+            <div class="search-box">
+              <i class="fas fa-search search-icon"></i>
+              <input type="text" placeholder="Search queries..." [(ngModel)]="searchQuery" (input)="filterQueries()">
+            </div>
+            <button (click)="exportQueries()" class="export-btn">
+              <i class="fas fa-download"></i>
+              Export
+            </button>
+          </div>
+        </div>
+
+        <div class="query-cards" *ngIf="filteredQueries.length > 0; else noQueries">
+          <div class="query-card" *ngFor="let query of displayedQueries" [ngClass]="query.status.toLowerCase()">
+            <div class="query-header">
+              <h4>{{query.title}}</h4>
+              <span class="status-pill" [ngClass]="query.status.toLowerCase()">{{query.status}}</span>
+            </div>
+            <div class="query-info">
+              <div class="time-info">
+                <div class="submission-time">
+                  <i class="fas fa-calendar-alt"></i>
+                  <span>Submitted: {{query.submissionDate | date:'MMM d, y'}}</span>
+                  <span class="time">{{query.submissionDate | date:'shortTime'}}</span>
+                </div>
+                <div class="resolution-time" *ngIf="query.resolutionDate">
+                  <i class="fas fa-check-circle"></i>
+                  <span>Resolved: {{query.resolutionDate | date:'MMM d, y'}}</span>
+                  <span class="time">{{query.resolutionDate | date:'shortTime'}}</span>
+                </div>
+              </div>
+              <div class="remarks" *ngIf="query.adminRemarks">
+                <i class="fas fa-comment-alt"></i>
+                <p>{{query.adminRemarks}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #noQueries>
+          <div class="no-queries">
+            <i class="fas fa-search"></i>
+            <p>No queries found</p>
+          </div>
+        </ng-template>
+
+        <div class="pagination">
+          <button [disabled]="currentPage === 1" (click)="previousPage()" class="page-btn">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <span class="page-info">Page {{currentPage}} of {{totalPages}}</span>
+          <button [disabled]="currentPage === totalPages" (click)="nextPage()" class="page-btn">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      </div>
+      
+    <app-personal-grievance *ngIf="activeComponent === 'personal-grievance'"></app-personal-grievance>
+    <app-anonymous-grievance *ngIf="activeComponent === 'anonymous-grievance'"></app-anonymous-grievance>
+    
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+    
+  </mat-sidenav-container>

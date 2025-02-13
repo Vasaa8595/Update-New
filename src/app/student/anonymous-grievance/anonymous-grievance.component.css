@@ -1,0 +1,64 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.issue-container {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 10px;
+    width: 1000px;
+}
+
+.issue-container h2 {
+    margin-top: 0;
+    background-color: #4682b4;
+    color: white;
+    padding: 10px;
+    border-radius: 5px 5px 0 0;
+    font-size: 18px;
+}
+
+.issue-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.issue-table td {
+    padding: 10px;
+    vertical-align: top;
+}
+
+.issue-table label {
+    font-weight: bold;
+}
+
+.issue-table input[type="text"],
+.issue-table select,
+.issue-table textarea {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.issue-table button {
+    padding: 10px 20px;
+    background-color: #4682b4;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.issue-table button:hover {
+    background-color: #4169e1;
+}
